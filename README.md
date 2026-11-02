@@ -66,7 +66,9 @@
 
 ## 📥 安装使用
 
-公开仓库提供脱敏源码，当前不分发含原始业务配置的私人安装包。以下安装流程适用于自行构建的 Windows x64 安装版。
+[下载最新 Windows 安装包](https://github.com/CroTuyuzhe/xiaomaxun-ops-assistant/releases/latest)
+
+安装版包含脱敏工作进程和空白发货模板，无需另外安装 Python。首次使用请在产品库中配置自己的 SKU / FNSKU。
 
 1. 下载并运行安装包，按提示选择安装位置。
 2. 打开应用，添加待办与需要监控的产品。
@@ -102,7 +104,7 @@ npm ci
 npm start
 ```
 
-公开版的产品库均为虚构示例，店铺显示为 StoreA / StoreB / StoreC。原始 Excel 模板和预编译工作进程不包含在公开仓库中。
+公开版的产品库均为虚构示例，店铺显示为 StoreA / StoreB / StoreC。公开仓库提供空白发货模板；安装包包含从脱敏源码构建的工作进程，预编译 exe 不提交到源码仓库。
 
 源码使用 Python 业务层，需要安装依赖：
 
@@ -110,7 +112,7 @@ npm start
 python -m pip install -r requirements.txt
 ```
 
-发货工具需自行提供名为“工厂发货计划.xlsx”的模板并放入 src/tools/shipping-planner/python/；模板需保留业务层所需的表头和 Sheet1。构建完整安装版前还需从脱敏源码生成 Python 工作进程，详见 scripts/build-workers.ps1。
+源码已附空白发货模板。构建完整安装版前，先运行 powershell -ExecutionPolicy Bypass -File scripts/build-workers.ps1 生成 Python 工作进程，再运行 npm run build:win。
 
 ```powershell
 # 语法检查与业务测试
