@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>小马逊运营助手</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <svg class="icon-sprite" aria-hidden="true">
+    <symbol id="icon-panel-top" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"></rect><path d="M3 9h18M9 15l3-3 3 3"></path></symbol>
+    <symbol id="icon-pin" viewBox="0 0 24 24"><path d="M9 4h6l-.8 5 3 3v2H6v-2l3-3L9 4Z"></path><path d="M12 14v7"></path></symbol>
+    <symbol id="icon-minus" viewBox="0 0 24 24"><path d="M5 12h14"></path></symbol>
+    <symbol id="icon-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"></path></symbol>
+    <symbol id="icon-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></symbol>
+    <symbol id="icon-refresh" viewBox="0 0 24 24"><path d="M20 7v5h-5M4 17v-5h5"></path><path d="M6.1 9a7 7 0 0 1 11.6-2L20 12M4 12l2.3 5a7 7 0 0 0 11.6-2"></path></symbol>
+    <symbol id="icon-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5"></path></symbol>
+    <symbol id="icon-external" viewBox="0 0 24 24"><path d="M14 5h5v5M19 5l-8 8"></path><path d="M18 13v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h5"></path></symbol>
+    <symbol id="icon-toolbox" viewBox="0 0 24 24"><path d="M4 8h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2Z"></path><path d="M9 8V5h6v3M2 13h20M10 13v2h4v-2"></path></symbol>
+    <symbol id="icon-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21h-4v-.09A1.7 1.7 0 0 0 8.6 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1.1-.4H3v-4h.09A1.7 1.7 0 0 0 4.6 8.6a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.83-2.83.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 0 .4-1.1V3h4v.09A1.7 1.7 0 0 0 15.4 4.6a1.7 1.7 0 0 0 1.88-.34l.06-.06 2.83 2.83-.06.06A1.7 1.7 0 0 0 19.4 9c.13.39.34.74.6 1 .3.3.68.43 1.1.4h.09v4h-.09a1.7 1.7 0 0 0-1.7.6Z"></path></symbol>
+    <symbol id="icon-package" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5 9-5ZM3 8v9l9 5 9-5V8M12 13v9"></path></symbol>
+    <symbol id="icon-table" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 10h18M9 10v10M15 10v10"></path></symbol>
+    <symbol id="icon-image" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"></rect><circle cx="9" cy="10" r="2"></circle><path d="m4 17 4-4 3 3 3-3 6 6"></path></symbol>
+    <symbol id="icon-file" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6Z"></path><path d="M14 3v5h5M9 13h6M9 17h6"></path></symbol>
+    <symbol id="icon-folder" viewBox="0 0 24 24"><path d="M3 7h7l2 2h9v10H3Z"></path><path d="M3 7V5h7l2 2"></path></symbol>
+    <symbol id="icon-browser" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"></rect><path d="M3 9h18M7 6.5h.01M10 6.5h.01"></path></symbol>
+    <symbol id="icon-chart" viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"></path></symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"></path></symbol>
+    <symbol id="icon-calculator" viewBox="0 0 24 24"><rect x="4" y="2.5" width="16" height="19" rx="3"></rect><path d="M8 6.5h8v3H8zM8 13h.01M12 13h.01M16 13h.01M8 17h.01M12 17h.01M16 17h.01"></path></symbol>
+    <symbol id="icon-swap" viewBox="0 0 24 24"><path d="M7 7h11l-3-3M18 7l-3 3M17 17H6l3 3M6 17l3-3"></path></symbol>
+    <symbol id="icon-edit" viewBox="0 0 24 24"><path d="m4 20 4.2-1 10.9-10.9a2.1 2.1 0 0 0-3-3L5.2 16 4 20Z"></path><path d="m14.8 6.4 3 3"></path></symbol>
+    <symbol id="icon-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m16.5 16.5 4 4"></path></symbol>
+    <symbol id="icon-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"></ellipse><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"></path></symbol>
+    <symbol id="icon-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></symbol>
+  </svg>
+  <div class="app-window">
+    <header class="app-header">
+      <div class="titlebar">
+        <div class="app-identity">
+          <button id="avatar-button" class="app-logo" type="button" title="点击更换头像" aria-label="上传或更换头像">
+            <img id="avatar-image" src="../assets/app-icon.png" alt="">
+            <span class="avatar-edit-badge" aria-hidden="true"><svg class="icon"><use href="#icon-edit"></use></svg></span>
+          </button>
+          <div><strong>小马逊运营助手</strong><small>Amazon Operations</small></div>
+        </div>
+        <div class="window-actions">
+          <button id="pin-button" title="窗口置顶" aria-label="窗口置顶" aria-pressed="false"><svg class="icon"><use href="#icon-pin"></use></svg></button>
+          <button id="dock-button" title="吸顶并自动隐藏" aria-label="吸顶并自动隐藏"><svg class="icon"><use href="#icon-panel-top"></use></svg></button>
+          <button id="minimize-button" title="最小化" aria-label="最小化"><svg class="icon"><use href="#icon-minus"></use></svg></button>
+          <button id="close-button" title="缩到系统托盘" aria-label="缩到系统托盘"><svg class="icon"><use href="#icon-close"></use></svg></button>
+        </div>
+      </div>
+    </header>
+    <input id="avatar-input" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+
+    <main class="main-content" id="main-content">
+      <section class="content-section todo-section">
+        <div class="section-title">
+          <div><h1>今日待办</h1><p id="today-label"></p></div>
+          <button class="round-add" data-action="add-todo" title="新增待办" aria-label="新增待办"><svg class="icon"><use href="#icon-plus"></use></svg></button>
+        </div>
+        <div id="todo-list"></div>
+      </section>
+
+      <section class="content-section product-section">
+        <div class="section-title">
+          <div><h1>产品价格监控</h1><p id="product-refresh-label">启动时查询一次</p></div>
+          <div class="section-actions">
+            <button class="text-button" data-action="refresh-all"><svg class="icon"><use href="#icon-refresh"></use></svg><span>刷新全部</span></button>
+            <button class="round-add" data-action="add-product" title="添加产品" aria-label="添加产品"><svg class="icon"><use href="#icon-plus"></use></svg></button>
+          </div>
+        </div>
+        <div id="product-list"></div>
+      </section>
+    </main>
+
+    <div class="bottom-dock" aria-label="快捷入口">
+      <span class="dock-current"><span class="dock-current-dot"></span>工作台</span>
+      <button id="history-button" title="历史代办" aria-label="历史代办"><svg class="icon"><use href="#icon-clock"></use></svg><span>历史代办</span></button>
+      <button id="tools-button" title="工具箱" aria-label="工具箱"><svg class="icon"><use href="#icon-toolbox"></use></svg><span>工具箱</span></button>
+      <button id="settings-button" title="设置" aria-label="设置"><svg class="icon"><use href="#icon-settings"></use></svg><span>设置</span></button>
+    </div>
+  </div>
+
+  <dialog id="todo-dialog">
+    <form method="dialog" id="todo-form" class="dialog-card">
+      <div class="dialog-head"><h2>新增待办</h2><button type="button" data-close-dialog="todo-dialog" aria-label="关闭"><svg class="icon"><use href="#icon-close"></use></svg></button></div>
+      <label>待办内容<input id="todo-title" maxlength="100" required placeholder="例如：检查广告预算"></label>
+      <div class="form-grid">
+        <label>类型<select id="todo-kind"><option value="temporary">临时待办</option><option value="fixed">固定待办</option></select></label>
+        <label id="recurrence-field" hidden>重复<select id="todo-recurrence"><option value="daily">每天</option><option value="weekly">每周</option><option value="monthly">每月</option></select></label>
+      </div>
+      <fieldset id="weekday-field" class="weekday-field" hidden>
+        <legend>每周提醒日（可多选）</legend>
+        <div class="weekday-options">
+          <label><input type="checkbox" name="todo-weekday" value="1"><span>周一</span></label>
+          <label><input type="checkbox" name="todo-weekday" value="2"><span>周二</span></label>
+          <label><input type="checkbox" name="todo-weekday" value="3"><span>周三</span></label>
+          <label><input type="checkbox" name="todo-weekday" value="4"><span>周四</span></label>
+          <label><input type="checkbox" name="todo-weekday" value="5"><span>周五</span></label>
+          <label><input type="checkbox" name="todo-weekday" value="6"><span>周六</span></label>
+          <label><input type="checkbox" name="todo-weekday" value="0"><span>周日</span></label>
+        </div>
+      </fieldset>
+      <label>提醒时间<input id="todo-due" type="datetime-local"></label>
+      <p class="form-help">每周固定待办仅使用所选星期几和提醒时间；不填时间则仅显示待办，不弹通知。</p>
+      <div class="dialog-actions"><button type="button" data-close-dialog="todo-dialog" class="button muted">取消</button><button type="submit" value="default" class="button primary">保存</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="history-dialog" class="sheet-dialog">
+    <div class="sheet-card history-sheet">
+      <div class="dialog-head"><div><span class="section-eyebrow">代办归档</span><h2>历史代办</h2><p>已完成与过期事项集中在这里</p></div><button type="button" data-close-dialog="history-dialog" aria-label="关闭"><svg class="icon"><use href="#icon-close"></use></svg></button></div>
+      <div class="history-filters" role="group" aria-label="历史代办筛选">
+        <button type="button" data-history-filter="all" class="active">全部 <span id="history-all-count">0</span></button>
+        <button type="button" data-history-filter="overdue">已过期 <span id="history-overdue-count">0</span></button>
+        <button type="button" data-history-filter="completed">已完成 <span id="history-completed-count">0</span></button>
+      </div>
+      <div id="history-list" class="history-list"></div>
+    </div>
+  </dialog>
+
+  <dialog id="product-dialog">
+    <form method="dialog" id="product-form" class="dialog-card">
+      <div class="dialog-head"><h2>添加产品</h2><button type="button" data-close-dialog="product-dialog" aria-label="关闭"><svg class="icon"><use href="#icon-close"></use></svg></button></div>
+      <label>产品名称<input id="product-name" maxlength="100" placeholder="可留空，查询后自动读取"></label>
+      <label>ASIN 或美国站链接<input id="product-asin" required placeholder="B0F1BX6N4M 或 amazon.com/dp/..."></label>
+      <label>截止日期<input id="product-deadline" type="date"></label>
+      <p class="form-help">支持纯 ASIN 和 amazon.com 商品链接。</p>
+      <div class="dialog-actions"><button type="button" data-close-dialog="product-dialog" class="button muted">取消</button><button type="submit" value="default" class="button primary">添加</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="product-deadline-dialog">
+    <form method="dialog" id="product-deadline-form" class="dialog-card">
+      <div class="dialog-head"><div><h2>设置截止日期</h2><p id="product-deadline-label"></p></div><button type="button" data-close-dialog="product-deadline-dialog" aria-label="关闭"><svg class="icon"><use href="#icon-close"></use></svg></button></div>
+      <input id="product-deadline-id" type="hidden">
+      <label>截止日期<input id="product-deadline-value" type="date" required></label>
+      <p class="form-help">到期当天产品会标红，并在今日待办中持续提醒，直到设置新的未来日期。</p>
+      <div class="dialog-actions"><button type="button" data-action="clear-product-deadline" class="button muted">清除日期</button><button type="button" data-close-dialog="product-deadline-dialog" class="button muted">取消</button><button type="submit" value="default" class="button primary">保存</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="tools-dialog" class="sheet-dialog">
+    <div class="sheet-card">
+      <div class="dialog-head"><div><h2>运营工具箱</h2><p>常用工具集中在这里</p></div><button type="button" data-close-dialog="tools-dialog" aria-label="关闭"><svg class="icon"><use href="#icon-close"></use></svg></button></div>
+      <div id="tools-list" class="tools-list"></div>
+    </div>
+  </dialog>
+
+  <dialog id="settings-dialog" class="sheet-dialog">
+    <div class="sheet-card">
+      <div class="dialog-head"><div><h2>设置</h2><p>本地偏好</p></div><button type="button" data-close-dialog="settings-dialog" aria-label="关闭"><svg class="icon"><use href="#icon-close"></use></svg></button></div>
+      <div id="settings-list" class="settings-list"></div>
+    </div>
+  </dialog>
+
+  <dialog id="daily-dialog" class="sheet-dialog">
+    <div class="sheet-card daily-sheet">
+      <div class="dialog-head">
+        <div><h2>每日数据填报</h2><p>产品表现 · Amazon 评分 · 关键词排名</p></div>
+        <button type="button" data-close-dialog="daily-dialog" aria-label="关闭"><svg class="icon"><use href="#icon-close"></use></svg></button>
+      </div>
+
+      <div class="daily-guide">
+        <div><strong>先打开对应的 WPS 日表</strong><small>工具会按 ASIN 匹配已打开的日表，写入后自动保存。</small></div>
+        <div class="daily-guide-actions">
+          <button type="button" data-action="daily-inspect-wps"><svg class="icon"><use href="#icon-check"></use></svg>检查日表</button>
+          <button type="button" data-action="daily-launch-pages"><svg class="icon"><use href="#icon-browser"></use></svg>打开工作页</button>
+        </div>
+      </div>
+
+      <form id="daily-group-form" class="daily-group-form">
+        <div class="daily-inline-fields">
+          <label class="tool-field">文件组名称<input id="daily-group-name" maxlength="60" placeholder="例如：相思木勺铲"></label>
+          <label class="tool-field">目标 ASIN<input id="daily-group-asin" maxlength="30" placeholder="多日表时建议填写"></label>
+        </div>
+        <div class="daily-file-fields">
+          <label class="tool-field">产品表现表
+            <div class="path-picker"><input id="daily-product-file" readonly placeholder="选择产品表现表"><button type="button" data-daily-pick="source"><svg class="icon"><use href="#icon-file"></use></svg>选择</button></div>
+          </label>
+          <label class="tool-field">关键词排名表
+            <div class="path-picker"><input id="daily-keyword-file" readonly placeholder="可留空"><button type="button" data-daily-pick="keyword"><svg class="icon"><use href="#icon-file"></use></svg>选择</button></div>
+          </label>
+        </div>
+        <button class="daily-add-group" type="submit"><svg class="icon"><use href="#icon-plus"></use></svg>加入待处理列表</button>
+      </form>
+
+      <div class="daily-list-head"><strong>待处理列表</strong><span id="daily-group-count">0 组</span></div>
+      <div id="daily-group-list" class="daily-group-list"></div>
+
+      <label class="check-row daily-rating-check"><input id="daily-include-ratings" type="checkbox" checked><span><strong>同步 Amazon 星级分布</strong><small>填写五星至一星占比；会在生成期间临时启动无界面浏览器</small></span></label>
+
+      <div id="daily-environment" class="environment-state">正在检查处理环境…</div>
+      <button class="tool-primary" id="daily-start" type="button">开始填写全部</button>
+
+      <div class="daily-traffic-card">
+        <div><strong>xydc 流量词</strong><small>抓取总流量词、自然流量词和广告流量词并写入当前日表</small></div>
+        <div class="daily-traffic-action"><input id="daily-traffic-asin" maxlength="30" placeholder="自动匹配当前日表，也可填写 ASIN"><button id="daily-traffic-start" type="button"><svg class="icon"><use href="#icon-chart"></use></svg>抓取并写入</button></div>
+      </div>
+
+      <div id="daily-run-panel" class="daily-run-panel" hidden>
+        <div class="daily-progress-head"><strong id="daily-status">准备中</strong><span id="daily-progress-count">0 / 0</span></div>
+        <div id="daily-result-list" class="daily-result-list"></div>
+        <div id="daily-log" class="daily-log"></div>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="converter-dialog" class="sheet-dialog">
+    <div class="sheet-card converter-sheet">
+      <div class="dialog-head">
+        <div><h2>尺寸和重量换算器</h2><p>手动换算 · 文本智能识别</p></div>
+        <button type="button" data-close-dialog="converter-dialog" aria-label="关闭"><svg class="icon"><use href="#icon-close"></use></svg></button>
+      </div>
+
+      <div class="converter-grid">
+        <section class="converter-card">
+          <div class="converter-card-head"><strong>尺寸换算</strong><span>默认 cm → inch</span></div>
+          <div class="converter-manual-row">
+            <label>数值<input id="length-converter-value" inputmode="decimal" value="1" aria-label="尺寸数值"></label>
+            <label>原单位<select id="length-converter-from"><option value="mm">mm</option><option value="cm" selected>cm</option><option value="m">m</option><option value="in">inch</option><option value="ft">ft</option></select></label>
+            <button class="converter-swap" type="button" data-converter-swap="length" title="交换单位" aria-label="交换尺寸单位"><svg class="icon"><use href="#icon-swap"></use></svg></button>
+            <label>目标单位<select id="length-converter-to"><option value="mm">mm</option><option value="cm">cm</option><option value="m">m</option><option value="in" selected>inch</option><option value="ft">ft</option></select></label>
+          </div>
+          <div class="converter-result"><small>换算结果</small><strong id="length-converter-result">0.3937 inch</strong></div>
+        </section>
+
+        <section class="converter-card">
+          <div class="converter-card-head"><strong>重量换算</strong><span>默认 kg → lb</span></div>
+          <div class="converter-manual-row">
+            <label>数值<input id="weight-converter-value" inputmode="decimal" value="1" aria-label="重量数值"></label>
+            <label>原单位<select id="weight-converter-from"><option value="g">g</option><option value="kg" selected>kg</option><option value="oz">oz</option><option value="lb">lb</option></select></label>
+            <button class="converter-swap" type="button" data-converter-swap="weight" title="交换单位" aria-label="交换重量单位"><svg class="icon"><use href="#icon-swap"></use></svg></button>
+            <label>目标单位<select id="weight-converter-to"><option value="g">g</option><option value="kg">kg</option><option value="oz">oz</option><option value="lb" selected>lb</option></select></label>
+          </div>
+          <div class="converter-result"><small>换算结果</small><strong id="weight-converter-result">2.2046 lb</strong></div>
+        </section>
+
+        <section class="converter-card smart-converter-card">
+          <div class="converter-card-head"><div><strong>智能换算</strong><small>自动提取文本中的全部数字和单位</small></div><span>即时转换</span></div>
+          <textarea id="smart-converter-input" placeholder="例如：44.80×30.80×5.00 cm&#10;或：39.9/*25.7/*2cm"></textarea>
+          <div class="smart-converter-options">
+            <label>没有单位时按<select id="smart-converter-source"><option value="mm">mm</option><option value="cm" selected>cm</option><option value="m">m</option><option value="in">inch</option><option value="ft">ft</option><option value="g">g</option><option value="kg">kg</option><option value="oz">oz</option><option value="lb">lb</option></select></label>
+            <label>转换为<select id="smart-converter-target"><option value="mm">mm</option><option value="cm">cm</option><option value="m">m</option><option value="in" selected>inch</option><option value="ft">ft</option><option value="g">g</option><option value="kg">kg</option><option value="oz">oz</option><option value="lb">lb</option></select></label>
+          </div>
+          <div class="converter-result smart-result" aria-live="polite"><small id="smart-converter-meta">输入后自动识别</small><strong id="smart-converter-result">等待输入尺寸或重量文本</strong></div>
+        </section>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="competitor-dialog" class="sheet-dialog">
+    <div class="sheet-card competitor-sheet">
+      <div class="dialog-head">
+        <div><h2>竞品图片采集器</h2><p>美国站 · v2.2 迁移版</p></div>
+        <button type="button" data-close-dialog="competitor-dialog" aria-label="关闭"><svg class="icon"><use href="#icon-close"></use></svg></button>
+      </div>
+      <form id="competitor-form">
+        <label class="tool-field">竞品 ASIN
+          <textarea id="competitor-asins" maxlength="500" placeholder="每行一个，也可用空格或逗号分隔"></textarea>
+        </label>
+        <div class="input-meta"><span>自动去重，单次最多 25 个</span><strong id="competitor-count">0 / 25</strong></div>
+        <label class="check-row"><input id="competitor-show-browser" type="checkbox" checked><span><strong>显示采集浏览器</strong><small>推荐开启，出现验证码时可直接处理</small></span></label>
+        <button class="tool-primary" id="competitor-start" type="submit">开始采集并生成 Excel</button>
+      </form>
+      <div class="tool-progress">
+        <div><strong id="competitor-status">等待开始</strong><span id="competitor-progress-count">0 / 0</span></div>
+        <progress id="competitor-progress" max="100" value="0"></progress>
+        <p id="competitor-detail">将采集标题、全部商品图与 A+ 图片，并自动排除 From the brand。</p>
+      </div>
+      <div class="result-list" id="competitor-results"></div>
+      <button class="tool-save" id="competitor-save" type="button" disabled>保存 Excel 到电脑</button>
+      <p class="legal-note">只读取公开商品页，不绕过验证码、登录或其他访问控制。</p>
+    </div>
+  </dialog>
+
+  <dialog id="keyword-rank-dialog" class="sheet-dialog">
+    <div class="sheet-card keyword-rank-sheet">
+      <div class="dialog-head">
+        <div><h2>关键词排名查询</h2><p>美国站 · 系统 Chrome · 自动下载 Excel</p></div>
+        <button type="button" data-close-dialog="keyword-rank-dialog" aria-label="关闭"><svg class="icon"><use href="#icon-close"></use></svg></button>
+      </div>
+      <form id="keyword-rank-form" class="keyword-rank-form">
+        <div class="keyword-rank-grid">
+          <label class="tool-field">ASIN<input id="keyword-rank-asin" maxlength="30" required placeholder="例如 B0FX1YNZ6M"></label>
+          <label class="tool-field">美国邮编<input id="keyword-rank-postcode" maxlength="10" required value="10110" placeholder="例如 10110"></label>
+        </div>
+        <label class="tool-field">关键词
+          <textarea id="keyword-rank-keywords" maxlength="24000" required placeholder="每行一个关键词"></textarea>
+        </label>
+        <div class="input-meta"><span>自动清理空行并去重，单个 ASIN 最多300词</span><strong id="keyword-rank-keyword-count">0 个</strong></div>
+        <label class="check-row keyword-rank-exclusion"><input id="keyword-rank-exclude" type="checkbox" checked><span><strong>Exclude &quot;Previously Viewed&quot;</strong><small>登录后确认插件原生选项已激活，再开始查询</small></span></label>
+        <div class="keyword-rank-editor-actions">
+          <button id="keyword-rank-cancel-edit" type="button" data-action="cancel-keyword-rank-edit" hidden>取消编辑</button>
+          <button id="keyword-rank-add" type="submit">加入查询队列</button>
+        </div>
+      </form>
+
+      <div class="keyword-rank-list-head"><strong>查询队列</strong><span id="keyword-rank-job-count">0 个 ASIN</span></div>
+      <div id="keyword-rank-job-list" class="keyword-rank-job-list"></div>
+
+      <label class="tool-field keyword-rank-output">Excel 输出目录
+        <div class="path-picker"><input id="keyword-rank-output" readonly placeholder="默认保存到下载目录"><button type="button" data-action="choose-keyword-rank-output"><svg class="icon"><use href="#icon-folder"></use></svg>选择</button></div>
+      </label>
+      <div id="keyword-rank-environment" class="environment-state">正在检查系统 Chrome…</div>
+      <button class="tool-primary" id="keyword-rank-start" type="button">开始查询全部</button>
+
+      <div class="tool-progress keyword-rank-progress-panel">
+        <div><strong id="keyword-rank-status">等待开始</strong><span id="keyword-rank-progress-count">0 / 0</span></div>
+        <progress id="keyword-rank-progress" max="100" value="0"></progress>
+        <p id="keyword-rank-detail">首次使用会打开独立 Chrome，请安装并登录 Amazon Keyword-Ranking-Tracker 插件。</p>
+      </div>
+      <div id="keyword-rank-results" class="keyword-rank-results"></div>
+      <button class="tool-save" id="keyword-rank-open-output" type="button" data-action="open-keyword-rank-output" disabled>打开 Excel 输出目录</button>
+      <p class="legal-note">软件不会保存插件账号或密码；每台电脑首次使用时需要单独安装并登录插件。</p>
+    </div>
+  </dialog>
+
+  <dialog id="shipping-dialog" class="sheet-dialog">
+    <div class="sheet-card shipping-sheet">
+      <div class="dialog-head">
+        <div><h2>工厂发货计划</h2><p>PDF 解析 · 产品标匹配 · Excel 生成</p></div>
+        <button type="button" data-close-dialog="shipping-dialog" aria-label="关闭"><svg class="icon"><use href="#icon-close"></use></svg></button>
+      </div>
+      <div class="shipping-library-guide">
+        <div><strong>产品库</strong><small>已迁移原工具的 17 条产品资料；生成前自动检查缺失项</small></div>
+        <button type="button" data-action="open-shipping-products"><svg class="icon"><use href="#icon-database"></use></svg>管理产品库</button>
+      </div>
+      <form id="shipping-form">
+        <label class="tool-field">箱唛 PDF
+          <div class="path-picker"><input id="shipping-pdf" readonly required placeholder="选择一个或多个 PDF 文件"><button type="button" data-shipping-pick="pdf"><svg class="icon"><use href="#icon-file"></use></svg>选择</button></div>
+        </label>
+        <div id="shipping-file-list" class="shipping-file-list" hidden></div>
+        <div class="shipping-grid four">
+          <label class="tool-field">店铺<select id="shipping-store"><option>StoreA</option><option>StoreB</option><option>StoreC</option></select></label>
+          <label class="tool-field">发货日期<input id="shipping-date" type="date" required></label>
+          <label class="tool-field">运输方式<select id="shipping-transport"><option>普船</option><option>快船</option><option>空运</option></select></label>
+          <label class="tool-field">运输时效（天）<input id="shipping-delivery-days" type="number" min="0" step="1" value="45" required inputmode="numeric"></label>
+        </div>
+        <div class="shipping-grid two">
+          <label class="tool-field">负责人<input id="shipping-person" maxlength="40" placeholder="可留空"></label>
+          <label class="check-row compact-check"><input id="shipping-locked" type="checkbox" checked><span><strong>锁仓</strong><small>输出 AGL 锁仓标记</small></span></label>
+        </div>
+        <label class="tool-field">BTW 标签库
+          <div class="path-picker"><input id="shipping-btw" readonly placeholder="可留空，报告中列出缺失"><button type="button" data-shipping-pick="btw"><svg class="icon"><use href="#icon-folder"></use></svg>选择</button></div>
+        </label>
+        <label class="tool-field">输出目录
+          <div class="path-picker"><input id="shipping-output" readonly placeholder="留空则输出到 PDF 所在目录"><button type="button" data-shipping-pick="output"><svg class="icon"><use href="#icon-folder"></use></svg>选择</button></div>
+        </label>
+        <div id="shipping-environment" class="environment-state">正在检查处理环境…</div>
+        <button class="tool-primary" id="shipping-start" type="submit">开始生成发货计划</button>
+      </form>
+      <div id="shipping-result" class="shipping-result" hidden></div>
+    </div>
+  </dialog>
+
+  <dialog id="shipping-products-dialog" class="sheet-dialog">
+    <div class="sheet-card shipping-products-sheet">
+      <div class="dialog-head">
+        <div><h2>产品库管理</h2><p>SKU · FNSKU · 产品名称</p></div>
+        <button type="button" data-close-dialog="shipping-products-dialog" aria-label="关闭"><svg class="icon"><use href="#icon-close"></use></svg></button>
+      </div>
+      <div class="shipping-product-toolbar">
+        <label><svg class="icon"><use href="#icon-search"></use></svg><input id="shipping-product-search" placeholder="搜索 SKU、FNSKU 或产品名称"></label>
+        <span id="shipping-product-count">0 条</span>
+        <button type="button" data-action="add-shipping-product"><svg class="icon"><use href="#icon-plus"></use></svg>新增产品</button>
+      </div>
+      <div class="shipping-product-table-head"><span>SKU</span><span>FNSKU</span><span>产品名称</span><span>操作</span></div>
+      <div id="shipping-product-list" class="shipping-product-list"></div>
+    </div>
+  </dialog>
+
+  <dialog id="shipping-product-editor-dialog">
+    <form method="dialog" id="shipping-product-editor-form" class="dialog-card shipping-product-editor-card">
+      <div class="dialog-head"><div><h2 id="shipping-product-editor-title">新增产品</h2><p>资料会用于发货计划 Excel</p></div><button type="button" data-close-dialog="shipping-product-editor-dialog" aria-label="关闭"><svg class="icon"><use href="#icon-close"></use></svg></button></div>
+      <label>SKU<input id="shipping-product-sku" maxlength="80" required autocomplete="off" placeholder="例如 DEMO-SKU-02"></label>
+      <label>FNSKU<input id="shipping-product-fnsku" maxlength="80" required autocomplete="off" placeholder="例如 DEMO-FNSKU-02"></label>
+      <label>产品名称<input id="shipping-product-name" maxlength="120" required autocomplete="off" placeholder="Excel 中显示的产品名称"></label>
+      <div class="dialog-actions"><button value="cancel" formnovalidate>取消</button><button value="save">保存</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="shipping-missing-products-dialog" class="sheet-dialog">
+    <form method="dialog" id="shipping-missing-products-form" class="sheet-card shipping-missing-sheet">
+      <div class="dialog-head">
+        <div><h2>补全产品资料</h2><p>检测到产品库资料不完整，补全后再生成 Excel</p></div>
+        <button type="button" data-close-dialog="shipping-missing-products-dialog" aria-label="关闭"><svg class="icon"><use href="#icon-close"></use></svg></button>
+      </div>
+      <div class="shipping-missing-note"><svg class="icon"><use href="#icon-database"></use></svg><span>每个 SKU 都需要 FNSKU 和产品名称，避免发货计划出现空白。</span></div>
+      <div class="shipping-missing-head"><span>SKU</span><span>FNSKU</span><span>产品名称</span></div>
+      <div id="shipping-missing-products-list" class="shipping-missing-products-list"></div>
+      <label class="check-row shipping-save-products"><input id="shipping-save-missing-products" type="checkbox" checked><span><strong>存回产品库</strong><small>下次遇到相同 SKU 自动匹配</small></span></label>
+      <div class="dialog-actions"><button value="cancel" formnovalidate>取消生成</button><button value="confirm">补全并继续生成</button></div>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status"></div>
+  <script src="unit-converter.js"></script>
+  <script src="todo-views.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

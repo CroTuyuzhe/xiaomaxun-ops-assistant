@@ -1,0 +1,89 @@
+{
+  "products": [
+    {
+      "sku": "DEMO-SKU-01",
+      "fnsku": "DEMO-FNSKU-01",
+      "name": "示例产品 01"
+    },
+    {
+      "sku": "DEMO-SKU-02",
+      "fnsku": "DEMO-FNSKU-02",
+      "name": "示例产品 02"
+    },
+    {
+      "sku": "DEMO-SKU-03",
+      "fnsku": "DEMO-FNSKU-03",
+      "name": "示例产品 03"
+    },
+    {
+      "sku": "DEMO-SKU-04",
+      "fnsku": "DEMO-FNSKU-04",
+      "name": "示例产品 04"
+    },
+    {
+      "sku": "DEMO-SKU-05",
+      "fnsku": "DEMO-FNSKU-05",
+      "name": "示例产品 05"
+    },
+    {
+      "sku": "DEMO-SKU-06",
+      "fnsku": "DEMO-FNSKU-06",
+      "name": "示例产品 06"
+    },
+    {
+      "sku": "DEMO-SKU-07",
+      "fnsku": "DEMO-FNSKU-07",
+      "name": "示例产品 07"
+    },
+    {
+      "sku": "DEMO-SKU-08",
+      "fnsku": "DEMO-FNSKU-08",
+      "name": "示例产品 08"
+    },
+    {
+      "sku": "DEMO-SKU-09",
+      "fnsku": "DEMO-FNSKU-09",
+      "name": "示例产品 09"
+    },
+    {
+      "sku": "DEMO-SKU-10",
+      "fnsku": "DEMO-FNSKU-10",
+      "name": "示例产品 10"
+    },
+    {
+      "sku": "DEMO-SKU-11",
+      "fnsku": "DEMO-FNSKU-11",
+      "name": "示例产品 11"
+    },
+    {
+      "sku": "DEMO-SKU-12",
+      "fnsku": "DEMO-FNSKU-12",
+      "name": "示例产品 12"
+    },
+    {
+      "sku": "DEMO-SKU-13",
+      "fnsku": "DEMO-FNSKU-13",
+      "name": "示例产品 13"
+    },
+    {
+      "sku": "DEMO-SKU-14",
+      "fnsku": "DEMO-FNSKU-14",
+      "name": "示例产品 14"
+    },
+    {
+      "sku": "DEMO-SKU-15",
+      "fnsku": "DEMO-FNSKU-15",
+      "name": "示例产品 15"
+    },
+    {
+      "sku": "DEMO-SKU-16",
+      "fnsku": "DEMO-FNSKU-16",
+      "name": "示例产品 16"
+    },
+    {
+      "sku": "DEMO-SKU-17",
+      "fnsku": "DEMO-FNSKU-17",
+      "name": "示例产品 17"
+    }
+  ]
+}

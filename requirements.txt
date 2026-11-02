@@ -1,0 +1,7 @@
+openpyxl
+pywin32; sys_platform == "win32"
+selenium
+PyMuPDF
+pdfplumber
+pandas
+pyinstaller

@@ -1,0 +1,58 @@
+{
+  "name": "xiaomaxun-ops-assistant",
+  "version": "0.5.18",
+  "private": true,
+  "description": "小马逊运营助手 - Windows 桌面运营工作台",
+  "main": "src/main/index.cjs",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test tests/*.test.cjs && python tests/daily_report_worker_test.py && python tests/shipping_planner_worker_test.py",
+    "check": "node --check src/main/index.cjs && node --check src/main/dock-controller.cjs && node --check src/main/local-store.cjs && node --check src/main/todo-schedule.cjs && node --check src/main/product-status.cjs && node --check src/main/profile-avatar.cjs && node --check src/preload/index.cjs && node --check src/renderer/unit-converter.js && node --check src/renderer/todo-views.js && node --check src/renderer/app.js && node --check src/tools/keyword-rank/runner.cjs && node --check src/tools/shipping-planner/runner.cjs && node --check src/tools/shipping-planner/product-library.cjs && node --check src/tools/daily-report/runner.cjs && node --check src/tools/daily-report/target.cjs && node --check src/tools/daily-report/xydc.cjs && node --check src/tools/competitor-images/asins.cjs && node --check src/tools/competitor-images/config.cjs && node --check src/tools/competitor-images/dependencies.cjs && node --check src/tools/competitor-images/scraper.cjs && node --check src/tools/competitor-images/workbook.cjs && npm test",
+    "build:win": "electron-builder --win nsis",
+    "build:portable": "electron-builder --win portable"
+  },
+  "dependencies": {
+    "jszip": "3.10.1",
+    "playwright-core": "1.62.1"
+  },
+  "devDependencies": {
+    "electron": "37.10.3",
+    "electron-builder": "26.15.3"
+  },
+  "build": {
+    "appId": "com.xiaodai.xiaomaxun",
+    "productName": "小马逊运营助手",
+    "asar": true,
+    "asarUnpack": [
+      "node_modules/playwright-core/**",
+      "src/tools/shipping-planner/python/**",
+      "src/tools/shipping-planner/bin/**",
+      "src/tools/daily-report/python/**",
+      "src/tools/daily-report/bin/**"
+    ],
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "output": "desktop-dist-v0.5.18"
+    },
+    "win": {
+      "icon": "src/assets/app-icon.ico",
+      "target": [
+        "nsis"
+      ],
+      "artifactName": "小马逊运营助手-安装版-v${version}.${ext}",
+      "requestedExecutionLevel": "asInvoker"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "小马逊运营助手",
+      "uninstallDisplayName": "小马逊运营助手"
+    }
+  }
+}

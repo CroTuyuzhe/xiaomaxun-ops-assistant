@@ -1,0 +1,16 @@
+node_modules/
+desktop-dist*/
+work/
+tmp/
+outputs/
+__pycache__/
+*.py[cod]
+se-metadata.json
+*-preview*.png
+ui-preview*.png
+*.log
+.DS_Store
+
+*.exe
+*.xlsx
+.env*
