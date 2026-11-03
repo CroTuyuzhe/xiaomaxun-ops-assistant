@@ -8,7 +8,7 @@
 
 今日待办 · 产品状态 · 发货计划 · 数据填报 · 竞品图片 · 关键词排名
 
-![Version](https://img.shields.io/badge/version-0.5.19-orange)
+![Version](https://img.shields.io/badge/version-0.5.18-orange)
 ![Windows](https://img.shields.io/badge/platform-Windows%20x64-0078D4)
 ![Electron](https://img.shields.io/badge/Electron-37-47848F)
 
@@ -125,7 +125,7 @@ npm run build:win
 npm run build:portable
 ```
 
-构建产物输出到 desktop-dist-v0.5.19/。
+构建产物输出到 desktop-dist-v0.5.18/。
 
 ## 📂 项目结构
 
@@ -140,11 +140,7 @@ tests/               业务逻辑与界面契约测试
 docs/images/         README 界面截图
 ```
 
-## 📝 最近更新 · v0.5.19
-
-- 修复每日填报评分跳过：优先读取评分摘要，完整校验五星至一星占比。
-- 备用浏览器优先复用匹配的缓存驱动，限制驱动联网等待。
-- 同步关闭、抓取失败或未匹配日表行时明确提示。
+## 📝 最近更新 · v0.5.18
 
 - 新增浮窗与悬浮球模式切换。
 - 悬浮球缩小至 40px，使用用户头像并自动同步。

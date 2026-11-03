@@ -2,8 +2,6 @@ import importlib.util
 import os
 import tempfile
 import unittest
-from unittest.mock import patch
-from io import BytesIO
 from datetime import datetime
 
 import openpyxl
@@ -17,28 +15,6 @@ SPEC.loader.exec_module(worker)
 
 
 class DailyReportRatingParserTests(unittest.TestCase):
-    def test_rating_summary_endpoint_works_without_starting_browser(self):
-        page = ''.join(f'<a aria-label="{percent} percent of reviews have {star} stars"></a>'
-                       for star, percent in [(5, 79), (4, 10), (3, 5), (2, 3), (1, 3)])
-        with patch.object(worker, 'urlopen', return_value=BytesIO(page.encode())) as request, \
-                patch.object(worker, 'webdriver', None):
-            self.assertEqual(worker.scrape_ratings('B0TEST0001')['pct5'], '79%')
-            self.assertIn('average-customer-review/popover', request.call_args.args[0].full_url)
-            self.assertIn('asin=B0TEST0001', request.call_args.args[0].full_url)
-
-    def test_incomplete_summary_falls_back_to_product_page(self):
-        page = ''.join(f'<a aria-label="{percent} percent of reviews have {star} stars"></a>'
-                       for star, percent in [(5, 79), (4, 10), (3, 5), (2, 3), (1, 3)])
-        with patch.object(worker, 'urlopen', side_effect=[BytesIO(b'<html></html>'), BytesIO(page.encode())]) as request:
-            self.assertEqual(len(worker.request_rating_percentages('B0TEST0001')), 5)
-            self.assertEqual(request.call_count, 2)
-
-    def test_captcha_is_reported_instead_of_empty_rating_success(self):
-        with patch.object(worker, 'urlopen', side_effect=lambda *args, **kwargs: BytesIO(b'<html>Robot Check validateCaptcha</html>')):
-            with self.assertRaisesRegex(RuntimeError, '验证页面'):
-                worker.request_rating_percentages('B0TEST0001')
-
-
     def test_date_columns_scan_past_legacy_column_499_limit(self):
         class FakeColumnCollection:
             Count = 502
