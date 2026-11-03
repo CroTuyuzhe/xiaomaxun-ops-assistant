@@ -26,6 +26,7 @@ except Exception:
 try:
     from selenium import webdriver
     from selenium.webdriver.chrome.options import Options
+    from selenium.webdriver.chrome.service import Service
     from selenium.webdriver.common.by import By
     from selenium.common.exceptions import TimeoutException, WebDriverException
     from selenium.webdriver.support.ui import WebDriverWait
@@ -517,7 +518,7 @@ def rating_percentages_from_html(page_html):
 
 
 def concise_browser_error(error):
-    message = str(error or "").strip().splitlines()[0]
+    message = (str(error or "").strip().splitlines() or [error.__class__.__name__])[0]
     message = re.sub(r"\s*\(Session info:.*$", "", message, flags=re.IGNORECASE).strip()
     if not message:
         message = error.__class__.__name__
@@ -525,9 +526,15 @@ def concise_browser_error(error):
 
 
 def request_rating_percentages(asin):
-    request = Request(
+    # 商品页可能延迟加载评价区域；直接请求当前 ASIN 的评分摘要，
+    # 不依赖商品页广告、推荐商品或浏览器驱动下载。
+    urls = [
+        f"https://www.amazon.com/gp/customer-reviews/widgets/average-customer-review/popover?contextId=dpx&asin={asin}",
         amazon_rating_url(asin),
-        headers={
+    ]
+    errors = []
+    for url in urls:
+        request = Request(url, headers={
             "User-Agent": (
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
                 "AppleWebKit/537.36 (KHTML, like Gecko) "
@@ -535,23 +542,48 @@ def request_rating_percentages(asin):
             ),
             "Accept-Language": "en-US,en;q=0.9",
             "Cookie": "lc-main=en_US; i18n-prefs=USD",
-        },
-    )
-    with urlopen(request, timeout=8) as response:
-        page_html = response.read(3_000_000).decode("utf-8", errors="replace")
-    return rating_percentages_from_html(page_html)
+        })
+        try:
+            with urlopen(request, timeout=8) as response:
+                page_html = response.read(3_000_000).decode("utf-8", errors="replace")
+            if re.search(r"validateCaptcha|Robot Check|automated access", page_html, re.I):
+                errors.append("Amazon 返回验证页面，请在浏览器完成验证后重试")
+                continue
+            percentages = rating_percentages_from_html(page_html)
+            if len(percentages) == 5:
+                return percentages
+            errors.append("Amazon 页面未包含完整的五星至一星占比")
+        except Exception as error:
+            errors.append(concise_browser_error(error))
+    raise RuntimeError("；".join(dict.fromkeys(errors)))
+
+
+def cached_chrome_driver():
+    # 优先使用与本机 Chrome 主版本匹配的缓存驱动，避免每次联网解析驱动。
+    if sys.platform != "win32":
+        return None
+    try:
+        import winreg
+        with winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Google\Chrome\BLBeacon") as key:
+            version = winreg.QueryValueEx(key, "version")[0]
+        from pathlib import Path
+        candidates = list((Path.home() / ".cache" / "selenium" / "chromedriver" / "win64").glob(f"{version.split('.')[0]}.*/*chromedriver.exe"))
+        return str(max(candidates, key=lambda item: tuple(int(x) for x in item.parent.name.split('.')))) if candidates else None
+    except Exception:
+        return None
 
 
 def scrape_ratings(asin):
     # 先尝试直接读取服务端 HTML。多数页面不需要启动 Chrome，速度更快，
     # 也不会被页面图片、广告与推荐模块拖慢渲染进程。
+    direct_error = "未获取到星级分布"
     try:
         percentages = request_rating_percentages(asin)
         if percentages:
             return {f"pct{star}": f"{percentages[star]}%" for star in range(5, 0, -1)
                     if star in percentages}
-    except Exception:
-        pass
+    except Exception as error:
+        direct_error = concise_browser_error(error)
 
     if not webdriver:
         raise RuntimeError("内置评分抓取组件不可用")
@@ -571,7 +603,13 @@ def scrape_ratings(asin):
         "profile.managed_default_content_settings.images": 2,
         "profile.default_content_setting_values.notifications": 2,
     })
-    driver = webdriver.Chrome(options=options)
+    os.environ.setdefault("SE_TIMEOUT", "15")
+    os.environ.setdefault("SE_AVOID_STATS", "true")
+    cached_driver = cached_chrome_driver()
+    try:
+        driver = webdriver.Chrome(service=Service(executable_path=cached_driver), options=options) if cached_driver else webdriver.Chrome(options=options)
+    except Exception as error:
+        raise RuntimeError(f"评分接口：{direct_error}；浏览器启动失败：{concise_browser_error(error)}") from error
     try:
         driver.set_page_load_timeout(20)
         driver.set_script_timeout(10)
@@ -586,8 +624,11 @@ def scrape_ratings(asin):
         deadline = time.monotonic() + 18
         percentages = {}
         last_error = None
-        while time.monotonic() < deadline and not percentages:
+        scrolled = False
+        while time.monotonic() < deadline and len(percentages) != 5:
             try:
+                if not scrolled:
+                    scrolled = bool(driver.execute_script("const el=document.querySelector('#customerReviews, #reviewsMedley, #averageCustomerReviews'); if(el){el.scrollIntoView();return true;} return false;"))
                 elements = driver.find_elements(
                     By.CSS_SELECTOR,
                     '#histogramTable [aria-label*="%"], '
@@ -603,12 +644,12 @@ def scrape_ratings(asin):
                 break
             if not percentages:
                 time.sleep(0.75)
-        if not percentages:
+        if len(percentages) != 5:
             if last_error:
                 raise RuntimeError(
                     f"Amazon 页面加载超时或浏览器无响应：{concise_browser_error(last_error)}"
                 )
-            raise RuntimeError("Amazon 页面已打开，但未读取到星级分布")
+            raise RuntimeError(f"评分接口：{direct_error}；浏览器页面未读取到完整星级分布")
         return {f"pct{star}": f"{percentages[star]}%" for star in range(5, 0, -1) if star in percentages}
     finally:
         try:
@@ -691,12 +732,18 @@ def process_group(wps, group, index, total, include_ratings):
                 if source_key in rating_data:
                     worksheet.Cells(row, target_column).Value = rating_data[source_key]
                     rating_fields += 1
+            if rating_data and rating_fields == 0:
+                warnings.append("已获取星级分布，但日表未识别到五星数至一星数行")
+                rating_fallback = True
             if not rating_data:
                 warnings.append("Amazon 页面未读取到星级分布")
                 rating_fallback = True
         except Exception as error:
             warnings.append(f"Amazon 星级抓取失败：{concise_browser_error(error)}")
             rating_fallback = True
+
+    if not include_ratings:
+        warnings.append("已关闭同步 Amazon 星级分布，本次未抓取")
 
     keyword_path = str(group.get("keyword") or "").strip()
     if keyword_path:
