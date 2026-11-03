@@ -150,6 +150,8 @@ function createWindow() {
     autoHideMenuBar: true,
     webPreferences: {
       preload: path.join(__dirname, '..', 'preload', 'index.cjs'),
+      // WPS/浏览器会遮挡主窗口；后台也持续渲染任务进度和完成状态。
+      backgroundThrottling: false,
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: true,

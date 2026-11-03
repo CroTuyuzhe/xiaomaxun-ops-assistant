@@ -8,7 +8,7 @@
 
 今日待办 · 产品状态 · 发货计划 · 数据填报 · 竞品图片 · 关键词排名
 
-![Version](https://img.shields.io/badge/version-0.5.18-orange)
+![Version](https://img.shields.io/badge/version-0.5.20-orange)
 ![Windows](https://img.shields.io/badge/platform-Windows%20x64-0078D4)
 ![Electron](https://img.shields.io/badge/Electron-37-47848F)
 
@@ -125,7 +125,7 @@ npm run build:win
 npm run build:portable
 ```
 
-构建产物输出到 desktop-dist-v0.5.18/。
+构建产物输出到 desktop-dist-v0.5.20/。
 
 ## 📂 项目结构
 
@@ -140,7 +140,10 @@ tests/               业务逻辑与界面契约测试
 docs/images/         README 界面截图
 ```
 
-## 📝 最近更新 · v0.5.18
+## 📝 最近更新 · v0.5.20
+
+- 关闭主窗口后台渲染节流，改善 WPS / 浏览器遮挡后进度需点击才刷新的问题。
+- 评分抓取逻辑沿用 v0.5.18。
 
 - 新增浮窗与悬浮球模式切换。
 - 悬浮球缩小至 40px，使用用户头像并自动同步。
