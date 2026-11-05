@@ -1,6 +1,6 @@
 {
   "name": "xiaomaxun-ops-assistant",
-  "version": "0.5.20",
+  "version": "0.5.21",
   "private": true,
   "description": "小马逊运营助手 - Windows 桌面运营工作台",
   "main": "src/main/index.cjs",
@@ -35,7 +35,7 @@
       "package.json"
     ],
     "directories": {
-      "output": "desktop-dist-v0.5.20"
+      "output": "desktop-dist-v0.5.21"
     },
     "win": {
       "icon": "src/assets/app-icon.ico",

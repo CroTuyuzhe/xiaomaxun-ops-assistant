@@ -9,7 +9,7 @@ if PYTHON_ROOT not in sys.path:
     sys.path.insert(0, PYTHON_ROOT)
 
 from app.pdf_parser import SkuSummary, US_LINE_RE, normalize_sku
-from app.pipeline import compute_fba_delivery_range, merge_batch_skus
+from app.pipeline import compute_fba_delivery_range, merge_batch_skus, build_output_folder_name, extract_pdf_sku_name
 from types import SimpleNamespace
 
 
@@ -51,6 +51,23 @@ class ShippingPlannerWorkerTests(unittest.TestCase):
         merged = merge_batch_skus([parsed])
         self.assertEqual(len(merged), 1)
         self.assertEqual(merged[0].sku, "DEMO-SKU-16")
+
+    def test_shipment_id_filename_uses_pdf_skus_for_folder(self):
+        parsed = SimpleNamespace(
+            pdf_stem="20261111-FBA19W2W4TBV-1072PCS-SBD3",
+            skus=[SkuSummary(sku="DEMO-SKU-01"), SkuSummary(sku="DEMO-SKU-02")],
+        )
+        self.assertEqual(
+            build_output_folder_name(parsed),
+            "DEMO-SKU-01&DEMO-SKU-02 工厂发货计划",
+        )
+        self.assertIsNone(extract_pdf_sku_name(
+            "20261111-fba19w2w4tbv-1072PCS-SBD3", ["DEMO-SKU-01"]))
+
+    def test_legacy_filename_keeps_sku_code(self):
+        self.assertEqual(extract_pdf_sku_name(
+            "20260812-KBCS02-10BAXL-7420PCS-POC2", ["KBCS02", "10BAXL"]),
+            "KBCS02-10BAXL")
 
     def test_delivery_days_are_independent_from_transport(self):
         self.assertEqual(

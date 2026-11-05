@@ -31,6 +31,9 @@ def extract_pdf_sku_name(pdf_stem: str, sku_list) -> str:
     segment = m.group(1).strip()
     if not segment:
         return None
+    # 新版文件名使用 FBA 货件编号；文件夹名称回退到 PDF 正文中的 SKU。
+    if re.fullmatch(r"FBA[A-Z0-9]+", segment, re.IGNORECASE):
+        return None
     known = {str(s).upper() for s in sku_list if s}
 
     def is_single_sku(seg: str) -> bool:
