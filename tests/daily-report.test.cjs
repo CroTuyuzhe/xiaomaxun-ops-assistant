@@ -105,3 +105,11 @@ test('traffic target asks only when multiple WPS sheets remain ambiguous', () =>
     ],
   }), /切换到目标日表/);
 });
+
+test('daily failure includes group root cause', () => {
+  const { formatWorkerError } = require('../src/tools/daily-report/runner.cjs');
+  assert.equal(formatWorkerError({message: '已完成 0/1 组', groups: [
+    {name: '组1', ok: false, error: "No module named 'win32timezone'"},
+  ]}), "已完成 0/1 组\n组1：No module named 'win32timezone'");
+  assert.equal(formatWorkerError({message: '无法连接 WPS'}), '无法连接 WPS');
+});

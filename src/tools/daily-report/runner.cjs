@@ -93,6 +93,13 @@ async function findPython() {
   throw new Error('每日填报环境缺失：需要 Python 3、openpyxl 和 WPS COM 组件。');
 }
 
+function formatWorkerError(payload, stderr = '') {
+  const summary = payload.message || stderr.trim() || '每日数据填报失败';
+  const errors = (payload.groups || []).filter((group) => !group.ok && group.error)
+    .map((group) => `${group.name || '文件组'}：${group.error}`);
+  return [summary, ...errors].join('\n');
+}
+
 async function runDailyWorker(app, command, args = [], onProgress = () => {}) {
   const root = workerRoot(app);
   const executable = bundledWorker(app);
@@ -114,7 +121,7 @@ async function runDailyWorker(app, command, args = [], onProgress = () => {}) {
     const detail = processResult.stderr.trim() || processResult.stdout.trim() || `工作进程退出码 ${processResult.code}`;
     throw new Error(`每日填报工作进程返回异常：${detail.slice(0, 500)}`);
   }
-  if (!payload.ok) throw new Error(payload.message || processResult.stderr.trim() || '每日数据填报失败');
+  if (!payload.ok) throw new Error(formatWorkerError(payload, processResult.stderr));
   return payload;
 }
 
@@ -154,6 +161,7 @@ async function writeDailyTraffic(app, input, onProgress) {
 }
 
 module.exports = {
+  formatWorkerError,
   bundledWorker,
   checkDailyReport,
   inspectDailyWps,
