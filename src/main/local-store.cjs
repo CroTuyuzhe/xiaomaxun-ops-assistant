@@ -1,6 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
+const { normalizeStoreSettings } = require('../tools/shipping-planner/stores.cjs');
 const { normalizeWeekdays } = require('./todo-schedule.cjs');
 
 const DEFAULT_STATE = Object.freeze({
@@ -14,7 +15,8 @@ const DEFAULT_STATE = Object.freeze({
     alwaysOnTop: false,
     profileAvatar: '',
     shippingPlanner: {
-      store: 'StoreA',
+      store: '',
+      stores: [],
       transport: '普船',
       deliveryDays: 45,
       person: '',
@@ -45,7 +47,12 @@ function mergeState(value) {
   return {
     ...base,
     ...value,
-    settings: { ...base.settings, ...(value.settings || {}) },
+    settings: {
+      ...base.settings, ...(value.settings || {}),
+      shippingPlanner: normalizeStoreSettings({
+        ...base.settings.shippingPlanner, ...(value.settings?.shippingPlanner || {}),
+      }),
+    },
     todos: Array.isArray(value.todos) ? value.todos : [],
     products: Array.isArray(value.products) ? value.products : [],
     schemaVersion: 1,

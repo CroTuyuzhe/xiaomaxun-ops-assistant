@@ -8,7 +8,7 @@
 
 今日待办 · 产品状态 · 发货计划 · 数据填报 · 竞品图片 · 关键词排名
 
-![Version](https://img.shields.io/badge/version-0.5.22-orange)
+![Version](https://img.shields.io/badge/version-0.5.23-orange)
 ![Windows](https://img.shields.io/badge/platform-Windows%20x64-0078D4)
 ![Electron](https://img.shields.io/badge/Electron-37-47848F)
 
@@ -125,7 +125,7 @@ npm run build:win
 npm run build:portable
 ```
 
-构建产物输出到 desktop-dist-v0.5.22/。
+构建产物输出到 desktop-dist-v0.5.23/。
 
 ## 📂 项目结构
 
@@ -140,7 +140,12 @@ tests/               业务逻辑与界面契约测试
 docs/images/         README 界面截图
 ```
 
-## 📝 最近更新 · v0.5.22
+## 📝 最近更新 · v0.5.23
+
+- 店铺支持新增、改名、移除与本地保存，自动保留旧版选中的店铺。
+- 恢复原版双工作表发货模板及采购区、发货区版式。
+
+### v0.5.22
 
 - 补齐每日填报工作进程的 win32timezone 依赖，修复 WPS 日期读取失败。
 - 填报失败时显示具体文件组错误。

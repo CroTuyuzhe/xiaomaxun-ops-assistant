@@ -54,6 +54,7 @@ contextBridge.exposeInMainWorld('xiaomaxun', {
     onProgress: (callback) => subscribe('daily:progress', callback),
   },
   shipping: {
+    updateStores: (input) => ipcRenderer.invoke('shipping:stores:update', input),
     check: () => ipcRenderer.invoke('shipping:check'),
     choosePdfs: () => ipcRenderer.invoke('shipping:choose-pdfs'),
     chooseFolder: (kind) => ipcRenderer.invoke('shipping:choose-folder', kind),

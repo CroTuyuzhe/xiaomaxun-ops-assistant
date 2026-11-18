@@ -645,9 +645,49 @@ async function openKeywordRank() {
   if (!keywordRankJobs.length) keywordRankAsin.focus();
 }
 
+function renderShippingStores() {
+  const saved = appState.settings.shippingPlanner || {};
+  const stores = saved.stores || [];
+  shippingStore.innerHTML = stores.length
+    ? stores.map((name) => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join('')
+    : '<option value="">请先新增店铺</option>';
+  shippingStore.value = saved.store || '';
+  document.querySelector('#shipping-store-name').value = shippingStore.value;
+  if (!stores.length) document.querySelector('#shipping-store-manager').open = true;
+}
+
+async function updateShippingStore(action) {
+  const status = document.querySelector('#shipping-store-status');
+  const buttons = [...document.querySelectorAll('[data-store-action]')];
+  shippingStore.disabled = true;
+  buttons.forEach((button) => { button.disabled = true; });
+  try {
+    appState = await api.shipping.updateStores({
+      action, current: shippingStore.value,
+      name: document.querySelector('#shipping-store-name').value,
+    });
+    renderShippingStores();
+    status.textContent = action === 'remove' ? '店铺已移除' : '店铺已保存';
+  } catch (error) {
+    shippingStore.value = appState.settings.shippingPlanner.store || '';
+    status.textContent = error.message || String(error);
+  } finally {
+    shippingStore.disabled = false;
+    buttons.forEach((button) => { button.disabled = false; });
+  }
+}
+
+shippingStore.addEventListener('change', () => updateShippingStore('select'));
+document.querySelectorAll('[data-store-action]').forEach((button) => {
+  button.addEventListener('click', () => updateShippingStore(button.dataset.storeAction));
+});
+document.querySelector('#shipping-store-name').addEventListener('keydown', (event) => {
+  if (event.key === 'Enter') { event.preventDefault(); updateShippingStore('add'); }
+});
+
 function setShippingDefaults() {
   const saved = appState.settings.shippingPlanner || {};
-  shippingStore.value = saved.store || 'StoreA';
+  renderShippingStores();
   shippingTransport.value = saved.transport || '普船';
   shippingDeliveryDays.value = Number.isInteger(saved.deliveryDays) && saved.deliveryDays >= 0
     ? saved.deliveryDays

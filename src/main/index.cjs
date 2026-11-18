@@ -16,6 +16,7 @@ const {
 } = require('electron');
 const { DockController } = require('./dock-controller.cjs');
 const { LocalStore } = require('./local-store.cjs');
+const { storeName, changeStoreSettings } = require('../tools/shipping-planner/stores.cjs');
 const { todoOccursOnDate } = require('./todo-schedule.cjs');
 const { normalizeProfileAvatar } = require('./profile-avatar.cjs');
 const { normalizeAsin, queryAmazonProduct } = require('./product-status.cjs');
@@ -784,10 +785,20 @@ function registerIpc() {
       productCount: library.list().length,
     };
   });
+  ipcMain.handle('shipping:stores:update', (_event, input) => {
+    if (shippingPlannerRunning) throw new Error('请等待发货计划生成完成后再管理店铺');
+    return store.update((state) => {
+      state.settings.shippingPlanner = changeStoreSettings(state.settings.shippingPlanner, input);
+      return state;
+    });
+  });
   ipcMain.handle('shipping:run', async (_event, input) => {
     if (shippingPlannerRunning) throw new Error('已有货件处理任务正在运行');
     const pdfPaths = normalizeShippingPdfPaths(input);
-    const stores = new Set(['StoreA', 'StoreB', 'StoreC']);
+    const selectedStore = storeName(input?.store);
+    if (!store.getState().settings.shippingPlanner.stores.includes(selectedStore)) {
+      throw new Error('请先新增并选择店铺');
+    }
     const transports = new Set(['普船', '快船', '空运']);
     const deliveryDays = Number(input?.deliveryDays ?? 45);
     if (!Number.isSafeInteger(deliveryDays) || deliveryDays < 0) {
@@ -801,7 +812,7 @@ function registerIpc() {
     }
     const normalized = {
       pdfPaths,
-      store: stores.has(input?.store) ? input.store : 'StoreA',
+      store: selectedStore,
       date: String(input?.date || '').trim(),
       transport: transports.has(input?.transport) ? input.transport : '普船',
       deliveryDays,
@@ -816,6 +827,7 @@ function registerIpc() {
     if (normalized.outputDir && !fs.existsSync(normalized.outputDir)) throw new Error('输出目录不存在');
     store.update((state) => {
       state.settings.shippingPlanner = {
+        ...state.settings.shippingPlanner,
         store: normalized.store,
         transport: normalized.transport,
         deliveryDays: normalized.deliveryDays,

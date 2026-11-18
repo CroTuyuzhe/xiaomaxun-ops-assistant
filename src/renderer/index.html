@@ -334,11 +334,22 @@
         </label>
         <div id="shipping-file-list" class="shipping-file-list" hidden></div>
         <div class="shipping-grid four">
-          <label class="tool-field">店铺<select id="shipping-store"><option>StoreA</option><option>StoreB</option><option>StoreC</option></select></label>
+          <label class="tool-field">店铺<select id="shipping-store" required></select></label>
           <label class="tool-field">发货日期<input id="shipping-date" type="date" required></label>
           <label class="tool-field">运输方式<select id="shipping-transport"><option>普船</option><option>快船</option><option>空运</option></select></label>
           <label class="tool-field">运输时效（天）<input id="shipping-delivery-days" type="number" min="0" step="1" value="45" required inputmode="numeric"></label>
         </div>
+        <details class="shipping-store-manager" id="shipping-store-manager">
+          <summary>管理店铺</summary>
+          <label class="tool-field">店铺名称<input id="shipping-store-name" maxlength="60" placeholder="输入店铺名称"></label>
+          <div class="shipping-store-actions">
+            <button type="button" data-store-action="add">新增并保存</button>
+            <button type="button" data-store-action="rename">修改当前名称</button>
+            <button type="button" data-store-action="remove">移除当前店铺</button>
+          </div>
+          <small>保存在本机，升级后保留；移除仅影响选项，不会删除已生成的文件。</small>
+        </details>
+        <div id="shipping-store-status" class="shipping-store-status" role="status" aria-live="polite"></div>
         <div class="shipping-grid two">
           <label class="tool-field">负责人<input id="shipping-person" maxlength="40" placeholder="可留空"></label>
           <label class="check-row compact-check"><input id="shipping-locked" type="checkbox" checked><span><strong>锁仓</strong><small>输出 AGL 锁仓标记</small></span></label>
